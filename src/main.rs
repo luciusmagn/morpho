@@ -70,9 +70,10 @@ fn main() {
     env_logger::Builder::from_default_env()
         .filter(None, log::LevelFilter::Info)
         .init();
+    dbg!("ayy lmao");
 
     let opt = Opt::from_args();
-    let res = match opt {
+    let res = match dbg!(opt) {
         Opt::Init { ref name } => init(name),
         Opt::New { ref tags, ref path } => new(path, tags),
         Opt::Build => build(),
@@ -112,8 +113,8 @@ fn build() -> Result<()> {
 fn serve(port: u16) -> Result<()> {
     let root_dir = env::current_dir()?;
     let mut mb = Mdblog::new(&root_dir)?;
-    mb.load_customize_settings()?;
-    mb.serve(port)?;
+    dbg!(mb.load_customize_settings())?;
+    dbg!(mb.serve(port))?;
     Ok(())
 }
 
@@ -132,6 +133,7 @@ fn theme(cmd: &SubCommandTheme) -> Result<()> {
 }
 
 fn log_error_chain(mut e: &dyn Error) {
+	error!{"error debug: {:?}", e};
     error!("error: {}", e);
     while let Some(source) = e.source() {
         error!("caused by: {}", source);

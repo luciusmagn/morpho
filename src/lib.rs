@@ -16,6 +16,7 @@ use std::rc::Rc;
 use std::sync::mpsc;
 use std::thread;
 use std::time::{Duration, Instant};
+use std::cmp::Ordering;
 
 use chrono::Local;
 use config::Config;
@@ -62,8 +63,8 @@ impl Mdblog {
     pub fn new<P: AsRef<Path>>(root: P) -> Result<Mdblog> {
         let root = root.as_ref();
         let settings: Settings = Default::default();
-        let theme_root_dir = get_dir(root, &settings.theme_root_dir)?;
-        let theme = Theme::new(theme_root_dir, &settings.theme)?;
+        let theme_root_dir = dbg!(get_dir(root, &settings.theme_root_dir))?;
+        let theme = dbg!(Theme::new(theme_root_dir, &settings.theme))?;
         Ok(Mdblog {
             root: root.to_owned(),
             settings,
@@ -119,9 +120,19 @@ impl Mdblog {
                 tag.add(post.clone());
             }
         }
-        posts.sort_by(|p1, p2| p2.headers.created.cmp(&p1.headers.created));
+        posts.sort_by(|p1, p2| match (p1.headers.created, p2.headers.created) {
+	        	(Some(_), Some(_)) => p2.headers.created.clone().unwrap().cmp(&p1.headers.created.clone().unwrap()),
+	        	(None, None) => p1.title.cmp(&p2.title),
+	        	(None, Some(_)) => Ordering::Less,
+	        	(Some(_), None) => Ordering::Greater,
+	        });
         for tag in tags_map.values_mut() {
-            tag.posts.sort_by(|p1, p2| p2.headers.created.cmp(&p1.headers.created));
+            tag.posts.sort_by(|p1, p2| match (p1.headers.created, p2.headers.created) {
+	        	(Some(_), Some(_)) => p2.headers.created.clone().unwrap().cmp(&p1.headers.created.clone().unwrap()),
+	        	(None, None) => p1.title.cmp(&p2.title),
+	        	(None, Some(_)) => Ordering::Less,
+	        	(Some(_), None) => Ordering::Greater,
+	        });
         }
         self.posts = posts;
         self.tags_map = tags_map;
@@ -164,7 +175,6 @@ impl Mdblog {
         for tag in self.tags_map.values() {
             self.export_tag(tag)?;
         }
-        self.export_atom()?;
         Ok(())
     }
 
@@ -250,9 +260,9 @@ impl Mdblog {
     pub fn rebuild(&mut self) -> Result<()> {
         info!("Rebuild blog again...");
         let site_url = self.settings.site_url.clone();
-        self.load_customize_settings()?;
+        dbg!(self.load_customize_settings())?;
         self.settings.site_url = site_url;
-        self.build()?;
+        dbg!(self.build())?;
         info!("Rebuild done!");
         Ok(())
     }
@@ -418,20 +428,6 @@ impl Mdblog {
             write_file(&dest, html.as_bytes())?;
             i += 1;
         }
-        Ok(())
-    }
-
-    /// export blog atom.xml
-    pub fn export_atom(&self) -> Result<()> {
-        debug!("rendering atom ...");
-        let build_dir = self.build_root_dir()?;
-        let dest = build_dir.join("atom.xml");
-        let now = Local::now();
-        let mut context = self.get_base_context()?;
-        context.insert("now", &now);
-        context.insert("posts", &self.posts[..10.min(self.posts.len())]);
-        let html = self.theme.renderer.render("atom.tpl", &context)?;
-        write_file(&dest, html.as_bytes())?;
         Ok(())
     }
 

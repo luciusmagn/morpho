@@ -11,16 +11,21 @@
 {% endblock css -%}
 
 {% block main %}
+	<section class="post">
     <h1>{{ post.title }}</h1>
-    <article>
-      {{ post.content }}
-      <ul id="article_footer">
-      {%- if post_tags %}
-        <li>tags: {% for tag in post_tags %}<a href="{{ config.site_url }}{{ tag.url }}">{{ tag.name }}<sup>{{ tag.num }}</sup></a>{% endfor %}</li>
-      {% endif -%}
-        <li>date: {{ post.headers.created | date(format="%Y-%m-%d %H:%M:%S") }}</li>
-      </ul>
-    </article>
+    {{ post.content }}
+    <spac class="meta">
+	   {%- if post.headers.created %}
+       <time datetime="{{ post.headers.created | date(format='%Y-%m-%dT%H:%M%S') }}">{{ post.headers.created }}</time>
+       {% endif -%}
+       {%- if post_tags %}
+       -
+       {% for tag in post_tags %}
+       <a href="{{ config.site_url }}{{ tag.url }}">{{ tag.name }}</a>
+       {% endfor %}
+       {%endif%}
+    </span>
+	</section>
 {%- endblock main %}
 
 {% block js %}

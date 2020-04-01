@@ -1,62 +1,49 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="mdblog.rs">
-  <link rel="icon" href="{{ config.site_url }}/static/favicon.png">
-  <link rel="stylesheet" href="{{ config.site_url }}/static/main.css">
-  {%- block css %}{% endblock css -%}
-  {%- block title %}{% endblock title -%}
+	<meta http-equiv="content-type"	content="text/html;	charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="generator" content="Jekyll v4.0.0">
+	<meta property="og:title" content="{{ config.site_name }}">
+	<meta property="og:locale" content="en_US">
+	<meta name="description" content="Simple and minimalistic jekyll blogging theme.">
+	<meta property="og:description"	content="Simple	and	minimalistic jekyll	blogging theme.">
+	<meta property="og:site_name" content="{{ config.site_name }}">
+	<meta name="twitter:card" content="summary">
+	<meta property="twitter:title" content="{{ config.site_name }}">
+	<meta name="twitter:site" content="@">
+	<script	type="application/ld+json">	{"description":"Simple and minimalistic	jekyll blogging	theme.","@type":"WebSite","url":"/","name":"{{ config.site_name }}","headline":"{{ config.site_name }}","@context":"https://schema.org"}</script>
+	<link rel="shortcut	icon" href="{{ config.site_url }}/static//favicon.png">
+	<link rel="alternate" type="application/atom+xml" title="{{ config.site_name }}"	href="https://sidey-jekyll.netlify.com/atom.xml">
+	<link rel="alternate" type="application/json" title="{{ config.site_name }}"	href="https://sidey-jekyll.netlify.com/feed.json">
+	<link rel="sitemap"	type="application/xml" title="sitemap" href="https://sidey-jekyll.netlify.com/sitemap.xml">
+	<link type="text/css" rel="stylesheet" href="{{ config.site_url }}/static/main.css">
+	{%- block css %}{% endblock css -%}
+	{%- block title %}{% endblock title -%}
 </head>
+<link type="text/css" id="dark-mode" rel="stylesheet" href="">
+<style type="text/css" id="dark-mode-custom-style"></style>
+
 <body>
-<header class="clearfix">
-  <section id="imglogo">
-    <a href="{{ config.site_url }}/index.html" title="{{ config.site_name }}">
-    <img src="{{ config.site_url }}/static/logo.png"></a>
-  </section>
-  <section id="textlogo">
-    <h1 id="site-name">
-      <a href="{{ config.site_url }}/index.html" title="{{ config.site_name }}">{{ config.site_name }}</a>
-    </h1>
-    <h2 id="site-motto">{{ config.site_motto }}</h2>
-  </section>
-  <nav>
-    <ul>
-      <li><a href="{{ config.site_url }}/index.html">Blog</a></li>
-    </ul>
-  </nav>
-</header>
-<div id="container" class="clearfix">
-  <main>
-  {%- block main %}{% endblock main %}
-  </main>
-  <aside>
-    <section class="tags clearfix">
-      <h1>Tags</h1>
-      <ul>
-      {%- for tag in all_tags %}
-        <li><a href="{{ config.site_url }}{{ tag.url  | urlencode }}">{{ tag.name }}<sup>{{ tag.num }}</sup></a></li>
-      {%- endfor %}
-      </ul>
-    </section>
-    <section class="links clearfix">
-      <h1>Links</h1>
-      <ul>
-        <li><a href="{{ config.site_url }}/index.html" target="_blank">Blog</a></li>
-      </ul>
-    </section>
-    <div>
-      <a href="{{ config.site_url }}/atom.xml" target="_blank">
-        <img id="feed" src="{{ config.site_url }}/static/feed.png">
-      </a>
-    </div>
-  </aside>
-</div>
-<footer>
-  <p>
-    {{ config.footer_note }}
-  </p>
-</footer>
-{%- block js %}{% endblock js -%}
+	<main role="main">
+		<header	role="banner">
+			<!--<h1	class="logo">{{ config.site_name }}</h1>-->
+			<nav role="navigation">
+				<ul>
+					<li><a href="/"	class="active">Writing</a></li>
+					<li><a href="/posts/about.html">About</a></li>
+					<li><a href="/posts/projects.html">Projects</a></li>
+					<li><a href="/posts/style.html">Style</a></li>
+					<li><a href="/posts/contacts.html">Contacts</a></li>
+					<li><a href="/posts/rocks-suck.html">Rocks-sucks</a></li>
+					<li><a href="/posts/contrib.html">Contrib</a></li>
+				</ul>
+			</nav>
+		</header>
+		{%- block main %}{% endblock main %}
+	</main>
 </body>
+{%- block js %}{% endblock js -%}
 </html>

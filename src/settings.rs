@@ -37,9 +37,9 @@ impl Default for Settings {
             site_motto: String::from("Simple is Beautiful!"),
             footer_note: String::from("Keep It Simple, Stupid!"),
             media_dir: String::from("media"),
-            build_dir: String::from("_build"),
+            build_dir: String::from("public"),
             theme: String::from("simple"),
-            theme_root_dir: String::from("_themes"),
+            theme_root_dir: String::from("themes"),
             rebuild_interval: 2,
             posts_per_page: 20,
         };

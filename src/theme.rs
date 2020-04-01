@@ -17,7 +17,7 @@ macro_rules! try_init_template {
 }
 
 /// blog theme object
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Theme {
     /// theme root directory
     pub root: PathBuf,
@@ -34,7 +34,6 @@ pub struct Theme {
     index: Vec<u8>,
     post: Vec<u8>,
     tag: Vec<u8>,
-    atom: Vec<u8>,
 }
 
 impl Theme {
@@ -47,7 +46,7 @@ impl Theme {
             renderer: Tera::default(),
             ..Default::default()
         };
-        let src_dir = root.join(name);
+        let src_dir = dbg!(root.join(name));
         if !src_dir.exists() {
             if name != "simple" {
                 return Err(Error::ThemeNotFound(name.into()));
@@ -61,21 +60,17 @@ impl Theme {
             theme.index.extend_from_slice(&SIMPLE_INDEX);
             theme.post.extend_from_slice(&SIMPLE_POST);
             theme.tag.extend_from_slice(&SIMPLE_TAG);
-            theme.atom.extend_from_slice(&SIMPLE_ATOM);
             theme.init_template()?;
             return Ok(theme);
         }
 
         read_file(&src_dir.join("static/favicon.png"), &mut theme.favicon)?;
-        read_file(&src_dir.join("static/logo.png"), &mut theme.logo)?;
-        read_file(&src_dir.join("static/feed.png"), &mut theme.feed)?;
         read_file(&src_dir.join("static/main.css"), &mut theme.main_css)?;
         read_file(&src_dir.join("static/main.js"), &mut theme.main_js)?;
         read_file(&src_dir.join("templates/base.tpl"), &mut theme.base)?;
         read_file(&src_dir.join("templates/index.tpl"), &mut theme.index)?;
         read_file(&src_dir.join("templates/post.tpl"), &mut theme.post)?;
         read_file(&src_dir.join("templates/tag.tpl"), &mut theme.tag)?;
-        read_file(&src_dir.join("templates/atom.tpl"), &mut theme.atom)?;
         theme.init_template()?;
         return Ok(theme);
     }
@@ -86,7 +81,6 @@ impl Theme {
         try_init_template!(self.renderer, "index.tpl", self.index);
         try_init_template!(self.renderer, "post.tpl", self.post);
         try_init_template!(self.renderer, "tag.tpl", self.tag);
-        try_init_template!(self.renderer, "atom.tpl", self.atom);
         Ok(())
     }
 
@@ -107,7 +101,6 @@ impl Theme {
         write_file(&dest_dir.join("templates/index.tpl"), &self.index)?;
         write_file(&dest_dir.join("templates/post.tpl"), &self.post)?;
         write_file(&dest_dir.join("templates/tag.tpl"), &self.tag)?;
-        write_file(&dest_dir.join("templates/atom.tpl"), &self.atom)?;
         Ok(())
     }
 
@@ -125,12 +118,11 @@ impl Theme {
 }
 
 static SIMPLE_FAVICON: &'static [u8] = include_bytes!("simple_theme/static/favicon.png");
-static SIMPLE_LOGO: &'static [u8] = include_bytes!("simple_theme/static/logo.png");
-static SIMPLE_FEED: &'static [u8] = include_bytes!("simple_theme/static/feed.png");
+static SIMPLE_LOGO: &'static [u8] = include_bytes!("simple_theme/static/favicon.png");
+static SIMPLE_FEED: &'static [u8] = include_bytes!("simple_theme/static/favicon.png");
 static SIMPLE_MAIN_CSS: &'static [u8] = include_bytes!("simple_theme/static/main.css");
 static SIMPLE_MAIN_JS: &'static [u8] = include_bytes!("simple_theme/static/main.js");
 static SIMPLE_BASE: &'static [u8] = include_bytes!("simple_theme/templates/base.tpl");
 static SIMPLE_INDEX: &'static [u8] = include_bytes!("simple_theme/templates/index.tpl");
 static SIMPLE_POST: &'static [u8] = include_bytes!("simple_theme/templates/post.tpl");
 static SIMPLE_TAG: &'static [u8] = include_bytes!("simple_theme/templates/tag.tpl");
-static SIMPLE_ATOM: &'static [u8] = include_bytes!("simple_theme/templates/atom.tpl");

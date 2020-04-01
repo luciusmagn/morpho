@@ -1,30 +1,25 @@
 {% extends "base.tpl" %}
 
 {% block title %}
-  <title>{{ title }}</title>
+  <title>Tag {{ title }}</title>
 {% endblock title %}
 
 {%- block css %}{% endblock css -%}
 
 {% block main %}
-  <h1>{{ title }}</h1>
-  <article>
+  <section class="posts">
+  <h1>Tag #{{ title }}</h1>
+  <ul>
   {%- for post in posts %}
-    <section>
-      <span>{{ post.headers.created | date }}</span>
-      <span><a href="{{ config.site_url }}{{ post.url  | urlencode }}">{{ post.title }}</a></span>
-    </section>
+    <li>
+      <a href="{{ config.site_url }}{{ post.url  | urlencode }}" class="post">{{ post.title }}</a>
+      {%- if post.headers.created %}
+      <time datetime="{{ post.headers.created | date }}">{{ post.headers.created | date }}</time>
+      {% endif %}
+    </li>
   {%- endfor %}
-  </article>
-
-  <div id="pages">
-  {%- if prev_name %}
-    <span class="prev"><a href="{{ prev_name | urlencode }}">« Previous</a></span>
-  {% endif -%}
-  {%- if next_name %}
-    <span class="next"><a href="{{ next_name | urlencode }}">Next »</a></span>
-  {% endif -%}
-  </div>
+  </ul>
+  </section>
 {%- endblock main %}
 
 {% block js %}

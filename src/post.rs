@@ -16,7 +16,7 @@ use crate::utils::markdown_to_html;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PostHeaders {
     /// post created local time, `created: 1970-01-01T00:00:00+08:00`
-    pub created: DateTime<Local>,
+    pub created: Option<DateTime<Local>>,
     /// post hidden flag, `hidden: true`, default `false`
     #[serde(default)]
     pub hidden: bool,
@@ -26,6 +26,8 @@ pub struct PostHeaders {
     /// post description
     #[serde(default)]
     pub description: String,
+    #[serde(default)]
+    pub title: String,
 }
 
 /// blog post
@@ -98,7 +100,9 @@ impl Post {
         Ok(Post {
             root: root.to_owned(),
             path: path.to_owned(),
-            title: title.to_owned(),
+            title: if headers.title.is_empty() {
+	            title.to_owned()
+	        } else { headers.title.clone() },
             url,
             headers,
             content,
