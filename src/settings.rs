@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use config::{ConfigError, Source, Value};
 use serde::{Deserialize, Serialize};
-use serde_json;
+use toml;
 
 /// blog setting
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -52,8 +52,8 @@ impl Source for Settings {
 	}
 
 	fn collect(&self) -> Result<HashMap<String, Value>, ConfigError> {
-		let serialized = serde_json::to_string(&self).expect("settings serialized error");
-		let map = serde_json::from_str::<HashMap<String, Value>>(&serialized)
+		let serialized = toml::to_string(&self).expect("settings serialized error");
+		let map = toml::from_str::<HashMap<String, Value>>(&serialized)
 			.expect("settings deserialized error");
 		Ok(map)
 	}

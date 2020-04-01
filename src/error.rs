@@ -25,8 +25,8 @@ pub enum Error {
 	TomlExport(toml::ser::Error),
 	#[display(fmt = "Path expand error")]
 	PathExpend(shellexpand::LookupError<std::env::VarError>),
-	#[display(fmt = "Post head parse error, please use yaml grammar")]
-	PostHeadPaser(serde_yaml::Error),
+	#[display(fmt = "Post head parse error, please use toml grammar")]
+	PostHeadPaser(toml::de::Error),
 
 	#[from(ignore)]
 	#[display(fmt = "blog root directory {:?} already exists", _0)]

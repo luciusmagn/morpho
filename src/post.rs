@@ -5,14 +5,13 @@ use std::path::{Path, PathBuf};
 use chrono::{DateTime, Local};
 use log::debug;
 use serde::{Deserialize, Serialize};
-use serde_yaml;
 
 use crate::error::{Error, Result};
 use crate::utils::markdown_to_html;
 
 /// blog post headers
 ///
-/// the blog post headers is parsed using yaml format.
+/// the blog post headers is parsed using toml format.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PostHeaders {
 	/// post created local time, `created: 1970-01-01T00:00:00+08:00`
@@ -79,7 +78,7 @@ impl Post {
 			.and_then(|x| x.to_str())
 			.expect(&format!("post filename format error: {}", path.display()));
 		let url = Path::new("/").join(path).with_extension("html");
-		let mut headers: PostHeaders = serde_yaml::from_str(head)?;
+		let mut headers: PostHeaders = toml::from_str(head)?;
 		if headers.description.is_empty() {
 			let desc = body
 				.split("\n\n")
