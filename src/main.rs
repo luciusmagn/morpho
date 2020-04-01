@@ -7,7 +7,7 @@ use mdblog::{Mdblog, Result};
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
-#[structopt(name = "mdblog")]
+#[structopt(name = "morpho")]
 /// static site generator from markdown files
 enum Opt {
 	#[structopt(name = "init")]

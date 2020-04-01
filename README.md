@@ -6,15 +6,15 @@
 [![dependency status][deps-image]][deps-link]
 [![Build Status][travis-image]][travis-link]
 
-[crate-image]: https://img.shields.io/crates/v/mdblog.svg
-[crate-link]: https://crates.io/crates/mdblog
-[docs-image]: https://docs.rs/mdblog/badge.svg
-[docs-link]: https://docs.rs/mdblog
-[license-image]: https://img.shields.io/crates/l/mdblog.svg
-[deps-image]: https://deps.rs/repo/github/fugangqiang/mdblog.rs/status.svg
-[deps-link]: https://deps.rs/repo/github/fugangqiang/mdblog.rs
-[travis-image]: https://travis-ci.org/FuGangqiang/mdblog.rs.svg?branch=master
-[travis-link]: https://travis-ci.org/FuGangqiang/mdblog.rs
+[crate-image]: https://img.shields.io/crates/v/morpho.svg
+[crate-link]: https://crates.io/crates/morpho
+[docs-image]: https://docs.rs/morpho/badge.svg
+[docs-link]: https://docs.rs/morpho
+[license-image]: https://img.shields.io/crates/l/morpho.svg
+[deps-image]: https://deps.rs/repo/github/fugangqiang/morpho.rs/status.svg
+[deps-link]: https://deps.rs/repo/github/fugangqiang/morpho.rs
+[travis-image]: https://travis-ci.org/FuGangqiang/morpho.rs.svg?branch=master
+[travis-link]: https://travis-ci.org/FuGangqiang/morpho.rs
 
 Static site generator from markdown files with features:
 
@@ -23,31 +23,31 @@ Static site generator from markdown files with features:
 * file name is the post title
 * post can be hidden(link does not be insert into index/tag page)
 
-you can check the [demo site](https://fugangqiang.github.io/mdblog.rs/)
-to learn the usages of mdblog.
+you can check the [demo site](https://fugangqiang.github.io/morpho.rs/)
+to learn the usages of morpho.
 
 
 # Install
 
-`mdblog` is implemented by rust language(2018 edition), so you need cargo command:
+`morpho` is implemented by rust language(2018 edition), so you need cargo command:
 
 ```
-cargo install mdblog
+cargo install morpho
 ```
 
-`mdblog` will be installed in your cargo binary directory(`~/.cargo/bin/`).
+`morpho` will be installed in your cargo binary directory(`~/.cargo/bin/`).
 
 
 # CLI
 
-`mdblog` can be use as a command:
+`morpho` can be use as a command:
 
 ```
-$ mdblog -h
+$ morpho -h
 static site generator from markdown files
 
 USAGE:
-    mdblog <SUBCOMMAND>
+    morpho <SUBCOMMAND>
 
 FLAGS:
     -h, --help       Prints help information
@@ -65,11 +65,11 @@ SUBCOMMANDS:
 you can also check the subcommand usage:
 
 ```
-$ mdblog serve -h
+$ morpho serve -h
 Serve the blog, rebuild on change
 
 USAGE:
-    mdblog serve [OPTIONS]
+    morpho serve [OPTIONS]
 
 FLAGS:
     -h, --help       Prints help information
@@ -83,7 +83,7 @@ OPTIONS:
 ### init blog
 
 ```
-$ mdblog init myblog
+$ morpho init myblog
 ```
 
 blog directory(`myblog`) layout is initialized:
@@ -108,7 +108,7 @@ myblog
 
 ```
 $ cd myblog
-$ mdblog build
+$ morpho build
 ```
 
 the blog static files are build into the subdir `_build`, the current blog directory(`myblog`) layout is:
@@ -129,7 +129,7 @@ myblog
 ### serve blog
 
 ```
-$ mdblog serve
+$ morpho serve
 ```
 
 open the site index page automatically,
@@ -140,7 +140,7 @@ and re-generate your static-site when you add or change content,
 create a new post titled `another`:
 
 ```
-$ mdblog new another
+$ morpho new another
 ```
 
 a new markdown file `posts/another.md` is created,

@@ -3,7 +3,7 @@
 #![doc(
 	html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
 	html_favicon_url = "https://www.rust-lang.org/favicon.ico",
-	html_root_url = "https://docs.rs/mdblog"
+	html_root_url = "https://docs.rs/morpho"
 )]
 #![deny(unused_extern_crates)]
 #![allow(clippy::needless_return)]
@@ -196,7 +196,7 @@ impl Mdblog {
 	pub fn serve(&mut self, port: u16) -> Result<()> {
 		let addr_str = format!("127.0.0.1:{}", port);
 		let server_root_dir =
-			TempBuilder::new().prefix("mdblog.").rand_bytes(10).tempdir()?;
+			TempBuilder::new().prefix("morpho.").rand_bytes(10).tempdir()?;
 		info!("server root dir: {}", &server_root_dir.path().display());
 
 		self.server_root_dir = Some(server_root_dir);
@@ -307,8 +307,8 @@ impl Mdblog {
 	/// blog glob ignore patterns.
 	///
 	/// the patterns are used when :
-	/// * `mdblog new` command, the post path is checked
-	/// * `mdblog serve` command, the modified file path is checked
+	/// * `morpho new` command, the post path is checked
+	/// * `morpho serve` command, the modified file path is checked
 	pub fn ignore_patterns(&self) -> Result<Vec<Pattern>> {
 		let mut patterns = vec![Pattern::new("**/.*")?];
 		let build_dir =
