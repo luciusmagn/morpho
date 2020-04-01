@@ -1,4 +1,4 @@
-# Mdblog
+# Mdsite
 
 [![crate][crate-image]][crate-link]
 [![Docs][docs-image]][docs-link]
@@ -54,11 +54,11 @@ FLAGS:
     -V, --version    Prints version information
 
 SUBCOMMANDS:
-    build    Build the blog static files
+    build    Build the site static files
     help     Prints this message or the help of the given subcommand(s)
-    init     Initialize the blog directory layout
-    new      Create a blog post
-    serve    Serve the blog, rebuild on change
+    init     Initialize the site directory layout
+    new      Create a site post
+    serve    Serve the site, rebuild on change
     theme    Blog theme operations
 ```
 
@@ -66,7 +66,7 @@ you can also check the subcommand usage:
 
 ```
 $ morpho serve -h
-Serve the blog, rebuild on change
+Serve the site, rebuild on change
 
 USAGE:
     morpho serve [OPTIONS]
@@ -76,20 +76,20 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-    -p, --port <port>    Serve the blog at http://127.0.0.1:<port> [default: 5000]
+    -p, --port <port>    Serve the site at http://127.0.0.1:<port> [default: 5000]
 ```
 
 
-### init blog
+### init site
 
 ```
-$ morpho init myblog
+$ morpho init mysite
 ```
 
-blog directory(`myblog`) layout is initialized:
+site directory(`mysite`) layout is initialized:
 
 ```
-myblog
+mysite
 ├── config.toml
 ├── media
 ├── posts
@@ -98,23 +98,23 @@ myblog
 └── _themes
 ```
 
-* `config.toml`: blog config file
-* `media`: blog media directory
-* `posts`: blog posts directory
+* `config.toml`: site config file
+* `media`: site media directory
+* `posts`: site posts directory
 * `posts/hello.md`: a markdown style post
-* `_themes`: blog themes directory
+* `_themes`: site themes directory
 
-### build blog
+### build site
 
 ```
-$ cd myblog
+$ cd mysite
 $ morpho build
 ```
 
-the blog static files are build into the subdir `_build`, the current blog directory(`myblog`) layout is:
+the site static files are build into the subdir `_build`, the current site directory(`mysite`) layout is:
 
 ```
-myblog
+mysite
 ├── config.toml
 ├── media
 ├── posts
@@ -126,7 +126,7 @@ myblog
 
 * `_builds`: generated static-site top directory
 
-### serve blog
+### serve site
 
 ```
 $ morpho serve
@@ -153,7 +153,7 @@ refresh the index page, you will find the new post.
 
 ```toml
 site_url = ""
-site_name = "Mdblog"
+site_name = "Mdsite"
 site_motto = "Simple is Beautiful!"
 footer_note = "Keep It Simple, Stupid!"
 media_dir = "media"

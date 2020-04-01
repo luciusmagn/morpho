@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::post::Post;
 
-/// blog tag
+/// site tag
 #[derive(Serialize)]
 pub struct Tag {
 	/// tag name

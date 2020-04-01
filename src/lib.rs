@@ -46,15 +46,15 @@ mod theme;
 mod utils;
 mod static_handler;
 
-/// blog object
-pub struct Mdblog {
-	/// blog root path
+/// site object
+pub struct Mdsite {
+	/// site root path
 	root:            PathBuf,
-	/// blog settings
+	/// site settings
 	settings:        Settings,
-	/// blog theme
+	/// site theme
 	theme:           Theme,
-	/// collection of blog posts
+	/// collection of site posts
 	posts:           Vec<Rc<Post>>,
 	/// tags map
 	tags_map:        BTreeMap<String, Tag>,
@@ -62,14 +62,14 @@ pub struct Mdblog {
 	server_root_dir: Option<TempDir>,
 }
 
-impl Mdblog {
+impl Mdsite {
 	/// create from the `root` path.
-	pub fn new<P: AsRef<Path>>(root: P) -> Result<Mdblog> {
+	pub fn new<P: AsRef<Path>>(root: P) -> Result<Mdsite> {
 		let root = root.as_ref();
 		let settings: Settings = Default::default();
 		let theme_root_dir = get_dir(root, &settings.theme_root_dir)?;
 		let theme = Theme::new(theme_root_dir, &settings.theme)?;
-		Ok(Mdblog {
+		Ok(Mdsite {
 			root: root.to_owned(),
 			settings,
 			theme,
@@ -79,7 +79,7 @@ impl Mdblog {
 		})
 	}
 
-	/// load blog customize settings.
+	/// load site customize settings.
 	///
 	/// layered configuration system:
 	/// * default settings
@@ -100,7 +100,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// load blog posts.
+	/// load site posts.
 	pub fn load_posts(&mut self) -> Result<()> {
 		let mut posts: Vec<Rc<Post>> = Vec::new();
 		let mut tags_map: BTreeMap<String, Tag> = BTreeMap::new();
@@ -154,7 +154,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// init blog directory.
+	/// init site directory.
 	pub fn init(&mut self) -> Result<()> {
 		if self.root.exists() {
 			return Err(Error::RootDirExisted(self.root.clone()));
@@ -183,7 +183,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// build the blog html files to `build_dir` directory.
+	/// build the site html files to `build_dir` directory.
 	pub fn build(&mut self) -> Result<()> {
 		self.load_posts()?;
 		self.export_media()?;
@@ -196,7 +196,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// serve the blog static files in the `build_dir` directory.
+	/// serve the site static files in the `build_dir` directory.
 	pub fn serve(&mut self, port: u16) -> Result<()> {
 		let addr_str = format!("127.0.0.1:{}", port);
 		let server_root_dir =
@@ -207,7 +207,7 @@ impl Mdblog {
 		self.settings.site_url = format!("http://{}", &addr_str);
 		self.build()?;
 
-		info!("server blog at {}", &self.settings.site_url);
+		info!("server site at {}", &self.settings.site_url);
 		let server_root_dir = self.server_root_dir.as_ref().unwrap().path().to_owned();
 
 		thread::spawn(move || {
@@ -229,7 +229,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// watch blog files, rebuild blog when some files modified.
+	/// watch site files, rebuild site when some files modified.
 	fn watch(&mut self) -> Result<()> {
 		let (tx, rx) = mpsc::channel();
 		let ignore_patterns = self.ignore_patterns()?;
@@ -278,9 +278,9 @@ impl Mdblog {
 		});
 	}
 
-	/// rebuild blog
+	/// rebuild site
 	pub fn rebuild(&mut self) -> Result<()> {
-		info!("Rebuild blog again...");
+		info!("Rebuild site again...");
 		let site_url = self.settings.site_url.clone();
 		self.load_customize_settings()?;
 		self.settings.site_url = site_url;
@@ -289,7 +289,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// blog build directory absolute path.
+	/// site build directory absolute path.
 	pub fn build_root_dir(&self) -> Result<PathBuf> {
 		if let Some(ref server_root_dir) = self.server_root_dir {
 			Ok(server_root_dir.path().to_owned())
@@ -298,22 +298,22 @@ impl Mdblog {
 		}
 	}
 
-	/// blog theme root directory absolute path.
+	/// site theme root directory absolute path.
 	pub fn theme_root_dir(&self) -> Result<PathBuf> {
 		get_dir(&self.root, &self.settings.theme_root_dir)
 	}
 
-	/// blog media root directory absolute path.
+	/// site media root directory absolute path.
 	pub fn media_root_dir(&self) -> Result<PathBuf> {
 		get_dir(&self.root, &self.settings.media_dir)
 	}
 
-	/// blog posts root directory.
+	/// site posts root directory.
 	pub fn post_root_dir(&self) -> Result<PathBuf> {
 		Ok(self.root.join("posts"))
 	}
 
-	/// blog glob ignore patterns.
+	/// site glob ignore patterns.
 	///
 	/// the patterns are used when :
 	/// * `morpho new` command, the post path is checked
@@ -358,7 +358,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// export blog config.toml file.
+	/// export site config.toml file.
 	pub fn export_config(&self) -> Result<()> {
 		let content = toml::to_string(&self.settings)?;
 		write_file(&self.root.join("config.toml"), content.as_bytes())?;
@@ -371,7 +371,7 @@ impl Mdblog {
 		Ok(build_dir.join("media").join(rel_path))
 	}
 
-	/// export blog media files.
+	/// export site media files.
 	pub fn export_media(&self) -> Result<()> {
 		debug!("exporting media ...");
 		let media_root_dir = self.media_root_dir()?;
@@ -391,14 +391,14 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// export blog static files.
+	/// export site static files.
 	pub fn export_static(&self) -> Result<()> {
 		let build_dir = self.build_root_dir()?;
 		self.theme.export_static(&build_dir)?;
 		Ok(())
 	}
 
-	/// export blog posts.
+	/// export site posts.
 	pub fn export_posts(&self) -> Result<()> {
 		let build_dir = self.build_root_dir()?;
 		for post in &self.posts {
@@ -409,7 +409,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// export blog index page.
+	/// export site index page.
 	pub fn export_index(&self) -> Result<()> {
 		let build_dir = self.build_root_dir()?;
 		let posts: Vec<_> = self.posts.iter().filter(|p| !p.headers.hidden).collect();
@@ -431,7 +431,7 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// export blog tag index page.
+	/// export site tag index page.
 	pub fn export_tag(&self, tag: &Tag) -> Result<()> {
 		let build_dir = self.build_root_dir()?;
 		let total = tag.posts.len();
@@ -466,7 +466,7 @@ impl Mdblog {
 		Ok(context)
 	}
 
-	/// render blog post html.
+	/// render site post html.
 	pub fn render_post(&self, post: &Post) -> Result<String> {
 		debug!("rendering post({}) ...", post.path.display());
 		let post_tags = self
@@ -512,8 +512,8 @@ impl Mdblog {
 		Ok(self.theme.renderer.render("tag.tpl", &context)?)
 	}
 
-	/// list blog themes.
-	pub fn list_blog_theme(&self) -> Result<()> {
+	/// list site themes.
+	pub fn list_site_theme(&self) -> Result<()> {
 		let theme_root = self.theme_root_dir()?;
 		if !theme_root.exists() || !theme_root.is_dir() {
 			error!("no theme");
@@ -534,14 +534,14 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// create a new blog theme as same as the current blog theme.
-	pub fn create_blog_theme(&self, name: &str) -> Result<()> {
+	/// create a new site theme as same as the current site theme.
+	pub fn create_site_theme(&self, name: &str) -> Result<()> {
 		self.theme.init_dir(name)?;
 		Ok(())
 	}
 
-	/// delete a blog theme.
-	pub fn delete_blog_theme(&self, name: &str) -> Result<()> {
+	/// delete a site theme.
+	pub fn delete_site_theme(&self, name: &str) -> Result<()> {
 		if self.settings.theme == name {
 			return Err(Error::ThemeInUse(name.into()));
 		}
@@ -553,8 +553,8 @@ impl Mdblog {
 		Ok(())
 	}
 
-	/// set blog theme.
-	pub fn set_blog_theme(&mut self, name: &str) -> Result<()> {
+	/// set site theme.
+	pub fn set_site_theme(&mut self, name: &str) -> Result<()> {
 		let theme_path = self.theme_root_dir()?.join(name);
 		if !theme_path.exists() || !theme_path.is_dir() {
 			return Err(Error::ThemeNotFound(name.into()));

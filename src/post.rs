@@ -9,9 +9,9 @@ use serde::{Deserialize, Serialize};
 use crate::error::{Error, Result};
 use crate::utils::markdown_to_html;
 
-/// blog post headers
+/// site post headers
 ///
-/// the blog post headers is parsed using toml format.
+/// the site post headers is parsed using toml format.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PostHeaders {
 	/// post created local time, `created: 1970-01-01T00:00:00+08:00`
@@ -29,13 +29,13 @@ pub struct PostHeaders {
 	pub title:       String,
 }
 
-/// blog post
+/// site post
 ///
-/// every blog post is composed of `head` part and `body` part.
+/// every site post is composed of `head` part and `body` part.
 /// the two part is separated by the first blank line.
 #[derive(Serialize)]
 pub struct Post {
-	/// blog root path
+	/// site root path
 	root:        PathBuf,
 	/// post path from relative root directory
 	pub path:    PathBuf,
@@ -110,12 +110,12 @@ impl Post {
 		})
 	}
 
-	/// the absolute path of blog post markdown file.
+	/// the absolute path of site post markdown file.
 	pub fn src(&self) -> PathBuf {
 		self.root.join(&self.path)
 	}
 
-	/// the absolute path of blog post html file.
+	/// the absolute path of site post html file.
 	pub fn dest(&self) -> PathBuf {
 		self.path.with_extension("html")
 	}

@@ -3,38 +3,38 @@ use std::error::Error;
 use std::path::{Path, PathBuf};
 
 use log::error;
-use morpho::{Mdblog, Result};
+use morpho::{Mdsite, Result};
 use argh::FromArgs;
 
 #[derive(FromArgs, Debug, PartialEq)]
 #[argh(subcommand, name = "init")]
-/// initialize the blog directory layout
+/// initialize the site directory layout
 struct Init {
 	#[argh(positional)]
-	/// the blog directory name
+	/// the site directory name
 	name: String,
 }
 
 #[derive(FromArgs, Debug, PartialEq)]
 #[argh(subcommand, name = "new")]
-/// create a blog post
+/// create a site post
 struct New {
 	#[argh(option, short = 't', long = "tag")]
 	/// post tags
 	tags: Vec<String>,
 	#[argh(positional)]
-	/// post path relative to blog `posts` directory
+	/// post path relative to site `posts` directory
 	path: PathBuf
 }
 
 //#[derive(FromArgs, Debug, PartialEq)]
 //#[argh(subcommand, name = "build")]
-//  build the blog static files
+//  build the site static files
 //struct Build;
 
 #[derive(FromArgs, Debug, PartialEq)]
 #[argh(subcommand, name = "serve")]
-/// serve the blog at <port>
+/// serve the site at <port>
 struct Serve {
 	#[argh(option, short = 'p', long = "port", default = "5000")]
 	/// the port to use
@@ -49,13 +49,13 @@ struct Build {}
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand)]
 enum Commands {
-	/// initialize the blog directory layout
+	/// initialize the site directory layout
 	Init(Init),
-	/// create a blog post
+	/// create a site post
 	New(New),
-	/// build the blog static files
+	/// build the site static files
 	Build(Build),
-	/// serve the blog, rebuild on change
+	/// serve the site, rebuild on change
 	Serve(Serve),
 }
 
@@ -84,14 +84,14 @@ fn main() {
 
 fn init(name: &str) -> Result<()> {
 	let root_dir = env::current_dir()?.join(name);
-	let mut mb = Mdblog::new(root_dir)?;
+	let mut mb = Mdsite::new(root_dir)?;
 	mb.init()?;
 	Ok(())
 }
 
 fn new(path: &Path, tags: &[String]) -> Result<()> {
 	let root_dir = env::current_dir()?;
-	let mut mb = Mdblog::new(&root_dir)?;
+	let mut mb = Mdsite::new(&root_dir)?;
 	mb.load_customize_settings()?;
 	mb.create_post(path, tags)?;
 	Ok(())
@@ -99,7 +99,7 @@ fn new(path: &Path, tags: &[String]) -> Result<()> {
 
 fn build() -> Result<()> {
 	let root_dir = env::current_dir()?;
-	let mut mb = Mdblog::new(&root_dir)?;
+	let mut mb = Mdsite::new(&root_dir)?;
 	mb.load_customize_settings()?;
 	mb.build()?;
 	Ok(())
@@ -107,7 +107,7 @@ fn build() -> Result<()> {
 
 fn serve(port: u16) -> Result<()> {
 	let root_dir = env::current_dir()?;
-	let mut mb = Mdblog::new(&root_dir)?;
+	let mut mb = Mdsite::new(&root_dir)?;
 	mb.load_customize_settings()?;
 	mb.serve(port)?;
 	Ok(())

@@ -16,7 +16,7 @@ macro_rules! try_init_template {
 	};
 }
 
-/// blog theme object
+/// site theme object
 #[derive(Default, Debug)]
 pub struct Theme {
 	/// theme root directory

@@ -4,26 +4,26 @@ use config::{ConfigError, Source, Value};
 use serde::{Deserialize, Serialize};
 use toml;
 
-/// blog setting
+/// site setting
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Settings {
-	/// blog base url
+	/// site base url
 	pub site_url:         String,
-	/// blog site name
+	/// site site name
 	pub site_name:        String,
-	/// blog site motto
+	/// site site motto
 	pub site_motto:       String,
-	/// blog footer note
+	/// site footer note
 	pub footer_note:      String,
-	/// blog media directory
+	/// site media directory
 	pub media_dir:        String,
-	/// blog build root directory
+	/// site build root directory
 	pub build_dir:        String,
-	/// blog theme name
+	/// site theme name
 	pub theme:            String,
-	/// blog theme root directory
+	/// site theme root directory
 	pub theme_root_dir:   String,
-	/// blog rebuild interval
+	/// site rebuild interval
 	pub rebuild_interval: u8,
 	/// post count per index page
 	pub posts_per_page:   usize,
@@ -33,7 +33,7 @@ impl Default for Settings {
 	fn default() -> Self {
 		return Settings {
 			site_url:         String::from(""),
-			site_name:        String::from("Mdblog"),
+			site_name:        String::from("Mdsite"),
 			site_motto:       String::from("Simple is Beautiful!"),
 			footer_note:      String::from("Keep It Simple, Stupid!"),
 			media_dir:        String::from("media"),

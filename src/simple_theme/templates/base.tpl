@@ -8,17 +8,13 @@
 	<meta name="generator" content="Jekyll v4.0.0">
 	<meta property="og:title" content="{{ config.site_name }}">
 	<meta property="og:locale" content="en_US">
-	<meta name="description" content="Simple and minimalistic jekyll blogging theme.">
-	<meta property="og:description"	content="Simple	and	minimalistic jekyll	blogging theme.">
+	<meta name="description" content="{{ config.site_motto }}">
+	<meta property="og:description"	content="{{ config.site_motto }}">
 	<meta property="og:site_name" content="{{ config.site_name }}">
 	<meta name="twitter:card" content="summary">
 	<meta property="twitter:title" content="{{ config.site_name }}">
 	<meta name="twitter:site" content="@">
-	<script	type="application/ld+json">	{"description":"Simple and minimalistic	jekyll blogging	theme.","@type":"WebSite","url":"/","name":"{{ config.site_name }}","headline":"{{ config.site_name }}","@context":"https://schema.org"}</script>
-	<link rel="shortcut	icon" href="{{ config.site_url }}/static//favicon.png">
-	<link rel="alternate" type="application/atom+xml" title="{{ config.site_name }}"	href="https://sidey-jekyll.netlify.com/atom.xml">
-	<link rel="alternate" type="application/json" title="{{ config.site_name }}"	href="https://sidey-jekyll.netlify.com/feed.json">
-	<link rel="sitemap"	type="application/xml" title="sitemap" href="https://sidey-jekyll.netlify.com/sitemap.xml">
+	<link rel="shortcut icon" href="{{ config.site_url }}/static//favicon.png">
 	<link type="text/css" rel="stylesheet" href="{{ config.site_url }}/static/main.css">
 	{%- block css %}{% endblock css -%}
 	{%- block title %}{% endblock title -%}

@@ -29,7 +29,7 @@ pub enum Error {
 	PostHeadPaser(toml::de::Error),
 
 	#[from(ignore)]
-	#[display(fmt = "blog root directory {:?} already exists", _0)]
+	#[display(fmt = "site root directory {:?} already exists", _0)]
 	RootDirExisted(PathBuf),
 	#[from(ignore)]
 	#[display(
@@ -44,10 +44,10 @@ pub enum Error {
 	#[display(fmt = "Theme template file {:?} encoding error", _0)]
 	ThemeFileEncoding(String),
 	#[from(ignore)]
-	#[display(fmt = "blog theme {:?} in use, can not be deleted", _0)]
+	#[display(fmt = "site theme {:?} in use, can not be deleted", _0)]
 	ThemeInUse(String),
 	#[from(ignore)]
-	#[display(fmt = "blog theme {:?} not found", _0)]
+	#[display(fmt = "site theme {:?} not found", _0)]
 	ThemeNotFound(String),
 	#[from(ignore)]
 	#[display(
