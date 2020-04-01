@@ -13,7 +13,7 @@
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
-use std::sync::mpsc;
+use std::sync::mpsc::{ self, channel };
 use std::thread;
 use std::time::{Duration, Instant};
 use std::cmp::Ordering;
@@ -26,6 +26,8 @@ use notify::{watcher, DebouncedEvent, RecursiveMode, Watcher};
 use tempfile::{Builder as TempBuilder, TempDir};
 use tera::{Context, Tera};
 use walkdir::{DirEntry, WalkDir};
+use civet::{Config as CivetConfig, Server};
+
 
 pub use crate::error::{Error, Result};
 pub use crate::post::Post;
@@ -33,6 +35,7 @@ pub use crate::post::PostHeaders;
 pub use crate::settings::Settings;
 pub use crate::tag::Tag;
 pub use crate::theme::Theme;
+pub use crate::static_handler::Static;
 use crate::utils::write_file;
 
 mod error;
@@ -41,6 +44,7 @@ mod settings;
 mod tag;
 mod theme;
 mod utils;
+mod static_handler;
 
 /// blog object
 pub struct Mdblog {
@@ -63,8 +67,8 @@ impl Mdblog {
 	pub fn new<P: AsRef<Path>>(root: P) -> Result<Mdblog> {
 		let root = root.as_ref();
 		let settings: Settings = Default::default();
-		let theme_root_dir = dbg!(get_dir(root, &settings.theme_root_dir))?;
-		let theme = dbg!(Theme::new(theme_root_dir, &settings.theme))?;
+		let theme_root_dir = get_dir(root, &settings.theme_root_dir)?;
+		let theme = Theme::new(theme_root_dir, &settings.theme)?;
 		Ok(Mdblog {
 			root: root.to_owned(),
 			settings,
@@ -207,12 +211,17 @@ impl Mdblog {
 		let server_root_dir = self.server_root_dir.as_ref().unwrap().path().to_owned();
 
 		thread::spawn(move || {
-			let mut config = rocket::config::Config::production();
-			config.set_address("127.0.0.1").expect("can not bind address: 127.0.0.1");
-			config.set_port(port);
-			rocket::custom(config)
-				.mount("/", rocket_contrib::serve::StaticFiles::from(&server_root_dir))
-				.launch();
+			let handler = Static::new(&server_root_dir);
+			let mut cfg = CivetConfig::new();
+			cfg.port(port).threads(30);
+
+			match Server::start(cfg, handler) {
+				Ok(_) => {
+					let (_tx, rx) = channel::<()>();
+				    rx.recv().unwrap();
+				},
+				Err(e) => error!("failed to start server: {}", e),
+			};
 		});
 
 		self.open_browser();
@@ -273,9 +282,9 @@ impl Mdblog {
 	pub fn rebuild(&mut self) -> Result<()> {
 		info!("Rebuild blog again...");
 		let site_url = self.settings.site_url.clone();
-		dbg!(self.load_customize_settings())?;
+		self.load_customize_settings()?;
 		self.settings.site_url = site_url;
-		dbg!(self.build())?;
+		self.build()?;
 		info!("Rebuild done!");
 		Ok(())
 	}

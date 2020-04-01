@@ -3,7 +3,7 @@ use std::error::Error;
 use std::path::{Path, PathBuf};
 
 use log::error;
-use mdblog::{Mdblog, Result};
+use morpho::{Mdblog, Result};
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
@@ -68,10 +68,8 @@ enum SubCommandTheme {
 
 fn main() {
 	env_logger::Builder::from_default_env().filter(None, log::LevelFilter::Info).init();
-	dbg!("ayy lmao");
-
 	let opt = Opt::from_args();
-	let res = match dbg!(opt) {
+	let res = match opt {
 		Opt::Init { ref name } => init(name),
 		Opt::New { ref tags, ref path } => new(path, tags),
 		Opt::Build => build(),
@@ -111,8 +109,8 @@ fn build() -> Result<()> {
 fn serve(port: u16) -> Result<()> {
 	let root_dir = env::current_dir()?;
 	let mut mb = Mdblog::new(&root_dir)?;
-	dbg!(mb.load_customize_settings())?;
-	dbg!(mb.serve(port))?;
+	mb.load_customize_settings()?;
+	mb.serve(port)?;
 	Ok(())
 }
 

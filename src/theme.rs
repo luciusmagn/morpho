@@ -46,7 +46,7 @@ impl Theme {
 			renderer: Tera::default(),
 			..Default::default()
 		};
-		let src_dir = dbg!(root.join(name));
+		let src_dir = root.join(name);
 		if !src_dir.exists() {
 			if name != "simple" {
 				return Err(Error::ThemeNotFound(name.into()));
