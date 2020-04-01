@@ -12,6 +12,7 @@
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
+use std::fs::read_to_string;
 use std::rc::Rc;
 use std::sync::mpsc::{ self, channel };
 use std::thread;
@@ -19,7 +20,6 @@ use std::time::{Duration, Instant};
 use std::cmp::Ordering;
 
 use chrono::Local;
-use config::Config;
 use glob::Pattern;
 use log::{debug, error, info};
 use notify::{watcher, DebouncedEvent, RecursiveMode, Watcher};
@@ -84,13 +84,10 @@ impl Mdsite {
 	/// layered configuration system:
 	/// * default settings
 	/// * `config.toml`
-	/// * `BLOG_` prefix environment variable
 	pub fn load_customize_settings(&mut self) -> Result<()> {
-		let mut settings = Config::new();
-		settings.merge(self.settings.clone())?;
-		settings.merge(config::File::with_name("config.toml"))?;
-		settings.merge(config::Environment::with_prefix("BLOG"))?;
-		self.settings = settings.try_into()?;
+		let cfg = read_to_string("config.toml")?;
+
+		self.settings = toml::de::from_str(&cfg)?;
 		if self.settings.site_url.ends_with('/') {
 			self.settings.site_url =
 				self.settings.site_url.trim_end_matches('/').to_string();

@@ -13,8 +13,6 @@ pub enum Error {
 	Io(std::io::Error),
 	#[display(fmt = "Path strip prefix error")]
 	PathStripPrefix(std::path::StripPrefixError),
-	#[display(fmt = "Config merge error")]
-	ConfigMerge(config::ConfigError),
 	#[display(fmt = "Template error")]
 	Template(tera::Error),
 	#[display(fmt = "Notify error")]
@@ -29,7 +27,7 @@ pub enum Error {
 	PostHeadPaser(toml::de::Error),
 
 	#[from(ignore)]
-	#[display(fmt = "site root directory {:?} already exists", _0)]
+	#[display(fmt = "blog root directory {:?} already exists", _0)]
 	RootDirExisted(PathBuf),
 	#[from(ignore)]
 	#[display(
@@ -44,10 +42,10 @@ pub enum Error {
 	#[display(fmt = "Theme template file {:?} encoding error", _0)]
 	ThemeFileEncoding(String),
 	#[from(ignore)]
-	#[display(fmt = "site theme {:?} in use, can not be deleted", _0)]
+	#[display(fmt = "blog theme {:?} in use, can not be deleted", _0)]
 	ThemeInUse(String),
 	#[from(ignore)]
-	#[display(fmt = "site theme {:?} not found", _0)]
+	#[display(fmt = "blog theme {:?} not found", _0)]
 	ThemeNotFound(String),
 	#[from(ignore)]
 	#[display(
@@ -69,7 +67,6 @@ impl StdError for Error {
 		match self {
 			Io(e) => Some(e),
 			PathStripPrefix(e) => Some(e),
-			ConfigMerge(e) => Some(e),
 			Template(e) => Some(e),
 			Notify(e) => Some(e),
 			GlobPattern(e) => Some(e),

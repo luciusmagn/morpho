@@ -1,60 +1,68 @@
-use std::collections::HashMap;
-
-use config::{ConfigError, Source, Value};
 use serde::{Deserialize, Serialize};
-use toml;
+
+#[rustfmt::skip]
+pub(super)mod defaults {
+    #[inline] pub(super) fn site_url()         -> String { "".into() }
+    #[inline] pub(super) fn site_name()        -> String { "My site".into() }
+    #[inline] pub(super) fn site_motto()       -> String { "Taxation is theft".into() }
+    #[inline] pub(super) fn footer_note()      -> String { "Trump 2020".into() }
+    #[inline] pub(super) fn media_dir()        -> String { "media".into() }
+    #[inline] pub(super) fn build_dir()        -> String { "public".into() }
+    #[inline] pub(super) fn theme()            -> String { "simple".into() }
+    #[inline] pub(super) fn theme_root_dir()   -> String { "themes".into() }
+    #[inline] pub(super) fn rebuild_interval() -> u8     { 2 }
+    #[inline] pub(super) fn posts_per_page()   -> usize  { 999 }
+}
 
 /// site setting
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Settings {
 	/// site base url
+	#[serde(default = "defaults::site_url")]
 	pub site_url:         String,
 	/// site site name
+	#[serde(default = "defaults::site_name")]
 	pub site_name:        String,
 	/// site site motto
+	#[serde(default = "defaults::site_motto")]
 	pub site_motto:       String,
 	/// site footer note
+	#[serde(default = "defaults::footer_note")]
 	pub footer_note:      String,
 	/// site media directory
+	#[serde(default = "defaults::media_dir")]
 	pub media_dir:        String,
 	/// site build root directory
+	#[serde(default = "defaults::build_dir")]
 	pub build_dir:        String,
 	/// site theme name
+	#[serde(default = "defaults::theme")]
 	pub theme:            String,
 	/// site theme root directory
+	#[serde(default = "defaults::theme_root_dir")]
 	pub theme_root_dir:   String,
 	/// site rebuild interval
+	#[serde(default = "defaults::rebuild_interval")]
 	pub rebuild_interval: u8,
 	/// post count per index page
+	#[serde(default = "defaults::posts_per_page")]
 	pub posts_per_page:   usize,
 }
 
 impl Default for Settings {
 	fn default() -> Self {
 		return Settings {
-			site_url:         String::from(""),
-			site_name:        String::from("Mdsite"),
-			site_motto:       String::from("Simple is Beautiful!"),
-			footer_note:      String::from("Keep It Simple, Stupid!"),
-			media_dir:        String::from("media"),
-			build_dir:        String::from("public"),
-			theme:            String::from("simple"),
-			theme_root_dir:   String::from("themes"),
-			rebuild_interval: 2,
-			posts_per_page:   20,
+			site_url:         defaults::site_url(),
+			site_name:        defaults::site_name(),
+			site_motto:       defaults::site_motto(),
+			footer_note:      defaults::footer_note(),
+			media_dir:        defaults::media_dir(),
+			build_dir:        defaults::build_dir(),
+			theme:            defaults::theme(),
+			theme_root_dir:   defaults::theme_root_dir(),
+			rebuild_interval: defaults::rebuild_interval(),
+			posts_per_page:   defaults::posts_per_page(),
 		};
 	}
 }
 
-impl Source for Settings {
-	fn clone_into_box(&self) -> Box<dyn Source + Send + Sync> {
-		Box::new((*self).clone())
-	}
-
-	fn collect(&self) -> Result<HashMap<String, Value>, ConfigError> {
-		let serialized = toml::to_string(&self).expect("settings serialized error");
-		let map = toml::from_str::<HashMap<String, Value>>(&serialized)
-			.expect("settings deserialized error");
-		Ok(map)
-	}
-}
