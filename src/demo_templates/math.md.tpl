@@ -1,5 +1,5 @@
-created: {{ now }}
-tags: [hello, math]
+created = "{{ now }}"
+tags = ["hello", "math"]
 
 This is a beautiful math test.
 

@@ -344,12 +344,12 @@ impl Mdsite {
 		}
 		let now = Local::now();
 		let content = format!(
-			"created: {}\n\
-             tags: [{}]\n\
+			"created = \"{}\"\n\
+             tags = [\"{}\"]\n\
              \n\
              this is a new post!\n",
 			now.format("%Y-%m-%dT%H:%M:%S%:z"),
-			tags.join(", ")
+			tags.iter().map(|x| format!("\"{}\"", x)).collect::<Vec<_>>().join(", ")
 		);
 		write_file(&post_path, content.as_bytes())?;
 		Ok(())
