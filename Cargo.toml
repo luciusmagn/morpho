@@ -1,6 +1,6 @@
 [package]
 name = "morpho"
-version = "0.18.1"
+version = "0.18.2"
 authors = ["Lukáš Hozda <luk.hozda@gmail.com>","FuGangqiang <fu_gangqiang@qq.com>"]
 description = "magnusi-improved version of mdblog"
 repository = "https://github.com/luciusmagn/morpho"
