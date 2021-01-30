@@ -18,9 +18,17 @@ body {
 	color: #16171a
 }
 
-nav	ul {
+nav	ul
 	border-right: 1px solid	#edf2f7
-}
+	& li a
+		transition: .5s
+		background-color: #fff
+		padding: 0.2em
+		border-radius: 0.2em
+		&:hover
+			background-color: #000
+			color: #fff
+
 
 a {
 	color: #000
